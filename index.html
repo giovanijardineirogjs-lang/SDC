@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scripts da Equipe</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b0f17; --bg-card: #121826; --bg-card-hover: #172033;
+      --border: #222b3d; --text: #e6e9f0; --muted: #8b95a8;
+      --accent: #5b8cff; --accent-2: #a46bff; --ok: #34c77b; --warn: #ffb84d;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: "Inter", system-ui, sans-serif; background: var(--bg); color: var(--text);
+      line-height: 1.6; min-height: 100vh;
+      background-image: radial-gradient(circle at 15% 0%, rgba(91,140,255,.12), transparent 40%),
+                        radial-gradient(circle at 90% 10%, rgba(164,107,255,.10), transparent 40%);
+    }
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+    a { color: var(--accent); }
+    code, .mono { font-family: "JetBrains Mono", monospace; }
+    code { background: rgba(91,140,255,.12); color: #b9ccff; padding: 1px 6px; border-radius: 5px; font-size: .9em; }
+
+    header { padding: 64px 0 32px; }
+    .tag-mono { font-family: "JetBrains Mono", monospace; font-size: 13px; color: var(--accent); letter-spacing: .05em; }
+    h1 { font-size: clamp(32px, 6vw, 52px); font-weight: 700; line-height: 1.1; margin: 12px 0 16px; }
+    h1 span { background: linear-gradient(90deg, var(--accent), var(--accent-2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    header p { color: var(--muted); max-width: 660px; font-size: 17px; }
+    h2 { font-size: 24px; margin: 48px 0 8px; }
+    .sub { color: var(--muted); margin-bottom: 20px; }
+
+    /* ----- Passos ----- */
+    .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+    .step { background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; padding: 22px; position: relative; }
+    .step .num {
+      width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2)); font-weight: 700; margin-bottom: 12px;
+    }
+    .step h3 { font-size: 17px; margin-bottom: 6px; }
+    .step p, .step li { color: var(--muted); font-size: 14.5px; }
+    .step ol { padding-left: 18px; margin-top: 6px; }
+    .step li { margin: 3px 0; }
+    .step strong { color: var(--text); }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px; font: inherit; font-size: 14px; font-weight: 600;
+      padding: 9px 16px; border-radius: 10px; cursor: pointer; text-decoration: none; border: 1px solid transparent; transition: .2s;
+    }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover { background: #4a7af0; }
+    .btn-ghost { background: transparent; color: var(--text); border-color: var(--border); }
+    .btn-ghost:hover { border-color: var(--muted); }
+    .btn-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+    .other-browsers { font-size: 13px; color: var(--muted); margin-top: 10px; }
+    .other-browsers a { color: var(--muted); }
+
+    /* ----- Projetos ----- */
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
+    .card {
+      background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; padding: 24px;
+      display: flex; flex-direction: column; gap: 12px; transition: transform .2s, border-color .2s, background .2s;
+    }
+    .card:hover { transform: translateY(-3px); border-color: var(--accent); background: var(--bg-card-hover); }
+    .card-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .icon { font-size: 30px; }
+    .version { font-family: "JetBrains Mono", monospace; font-size: 12px; color: var(--ok); background: rgba(52,199,123,.12); padding: 3px 10px; border-radius: 999px; }
+    .card h3 { font-size: 19px; font-weight: 600; line-height: 1.3; }
+    .card p { color: var(--muted); font-size: 15px; }
+    .card ul { color: var(--muted); font-size: 14px; padding-left: 18px; flex: 1; }
+    .sites { display: flex; flex-wrap: wrap; gap: 6px; }
+    .sites span { font-family: "JetBrains Mono", monospace; font-size: 12px; background: rgba(91,140,255,.1); color: var(--accent); padding: 2px 8px; border-radius: 6px; }
+    .card .btn-row { margin-top: 4px; }
+
+    /* ----- Ajuda ----- */
+    details { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; margin-bottom: 10px; }
+    summary { cursor: pointer; font-weight: 600; }
+    details[open] summary { margin-bottom: 10px; }
+    details p, details li { color: var(--muted); font-size: 15px; }
+    details ol, details ul { padding-left: 20px; }
+    details li { margin: 4px 0; }
+    details strong { color: var(--text); }
+
+    .toast {
+      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px); opacity: 0;
+      background: var(--ok); color: #06210f; font-weight: 600; padding: 10px 18px; border-radius: 10px; transition: .25s; pointer-events: none;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    footer { border-top: 1px solid var(--border); margin-top: 64px; padding: 24px 0; color: var(--muted); font-size: 14px; text-align: center; }
+    @media (max-width: 480px) { header { padding: 40px 0 20px; } .grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <div class="tag-mono">// scripts para Tampermonkey</div>
+    <!-- ✏️ EDITE: seu nome -->
+    <h1>Scripts da <span>Equipe</span></h1>
+    <p>Ferramentas que agilizam o dia a dia no Salesforce, no SDE e no Saúde no Campo. Instale o Tampermonkey uma vez e depois é só clicar em <strong>Instalar</strong> no script que quiser.</p>
+  </header>
+
+  <!-- ================= PASSO A PASSO ================= -->
+  <h2>Como instalar</h2>
+  <p class="sub">Leva menos de 2 minutos. Os passos 1 e 2 só são feitos na primeira vez.</p>
+
+  <div class="steps">
+    <div class="step">
+      <div class="num">1</div>
+      <h3>Instale o Tampermonkey</h3>
+      <p>É uma extensão gratuita do navegador que executa os scripts. Clique abaixo e depois em <strong>“Usar no Chrome”</strong> (ou “Obter”).</p>
+      <div class="btn-row">
+        <a class="btn btn-primary" id="tm-btn" href="https://chromewebstore.google.com/detail/dhdgffkkebhmkfjojejmpbldmpobfkfo" target="_blank" rel="noopener">⬇ Instalar Tampermonkey</a>
+      </div>
+      <div class="other-browsers" id="tm-others"></div>
+    </div>
+
+    <div class="step">
+      <div class="num">2</div>
+      <h3>Libere a permissão de scripts</h3>
+      <p>O Chrome e o Edge exigem uma permissão extra:</p>
+      <ol id="perm-steps">
+        <li>Clique no ícone de quebra-cabeça 🧩 ao lado da barra de endereço.</li>
+        <li>Nos 3 pontinhos do Tampermonkey, escolha <strong>Gerenciar extensão</strong>.</li>
+        <li>Ative <strong>“Permitir scripts de usuário”</strong>.</li>
+        <li>Se essa opção não aparecer, ative o <strong>Modo do desenvolvedor</strong> no canto superior direito da página de extensões.</li>
+      </ol>
+    </div>
+
+    <div class="step">
+      <div class="num">3</div>
+      <h3>Instale o script</h3>
+      <p>Clique em <strong>Instalar</strong> no projeto desejado logo abaixo. O Tampermonkey abre uma tela própria: clique em <strong>Instalar</strong> de novo.</p>
+      <p style="margin-top:8px">Depois é só abrir (ou recarregar com <code>F5</code>) o site do sistema e o script já estará funcionando.</p>
+    </div>
+  </div>
+
+  <!-- ================= PROJETOS ================= -->
+  <h2>Projetos</h2>
+  <p class="sub">Se já tiver o Tampermonkey, basta clicar em <strong>Instalar</strong>. Reinstalar uma versão nova atualiza o script.</p>
+  <main class="grid" id="grid"></main>
+
+  <!-- ================= AJUDA ================= -->
+  <h2>Dúvidas e problemas</h2>
+  <p class="sub">Se algo não funcionar, veja aqui.</p>
+
+  <details>
+    <summary>Cliquei em “Instalar” e apareceu um monte de código</summary>
+    <p>Isso significa que o Tampermonkey não está instalado ou não está ativo. Confira os <strong>passos 1 e 2</strong>, recarregue esta página e clique em Instalar novamente.</p>
+  </details>
+
+  <details>
+    <summary>O script está instalado, mas não aparece nada no sistema</summary>
+    <ol>
+      <li>Recarregue a página do sistema com <code>F5</code>.</li>
+      <li>Clique no ícone do Tampermonkey: o script deve aparecer com o botão <strong>ligado</strong> (verde).</li>
+      <li>Confira se a <strong>“Permitir scripts de usuário”</strong> do passo 2 está ativada. Ela costuma ser desligada quando o Chrome é atualizado.</li>
+    </ol>
+  </details>
+
+  <details>
+    <summary>Instalar manualmente (copiar e colar)</summary>
+    <ol>
+      <li>No card do projeto, clique em <strong>Copiar código</strong>.</li>
+      <li>Clique no ícone do Tampermonkey e em <strong>Criar um novo script…</strong></li>
+      <li>Apague todo o conteúdo do editor, cole o código (<code>Ctrl+V</code>) e salve com <code>Ctrl+S</code>.</li>
+    </ol>
+  </details>
+
+  <details>
+    <summary>Como recebo atualizações?</summary>
+    <p>Como os scripts foram instalados por este site, o Tampermonkey verifica sozinho se há uma versão nova (cerca de uma vez por dia). Para forçar, clique no ícone do Tampermonkey e em <strong>Verificar atualizações de scripts</strong>. Outra opção é clicar em <strong>Instalar</strong> novamente aqui.</p>
+  </details>
+
+  <details>
+    <summary>Como desativar ou remover um script</summary>
+    <p>Clique no ícone do Tampermonkey e use o botão ao lado do nome do script para ligar ou desligar. Para remover, abra o <strong>Painel</strong>, marque o script e clique na lixeira.</p>
+  </details>
+
+</div>
+
+<footer>
+  <!-- ✏️ EDITE: rodapé -->
+  Feito com ☕ por Seu Nome · <span id="ano"></span>
+</footer>
+
+<div class="toast" id="toast">Código copiado!</div>
+
+<script>
+  /* =========================================================
+     ✏️ LISTA DE PROJETOS
+     arquivo: nome do arquivo dentro da pasta "scripts".
+              Precisa terminar em .user.js para a instalação automática funcionar.
+     A versão mostrada no card é lida do próprio arquivo (@version).
+     ========================================================= */
+  const projetos = [
+    {
+      icone: "💬",
+      titulo: "Painel Unificado: Respostas, Registro e Transferência",
+      descricao: "Uma janela única com três abas para o atendimento por chat.",
+      recursos: [
+        "Respostas rápidas prontas para usar",
+        "Registro de chats (protocolo, CPF e tratativa)",
+        "Transferência automática para a fila",
+      ],
+      sites: ["Salesforce", "SDE Einstein"],
+      arquivo: "transferencia-de-chats.user.js"
+    },
+    {
+      icone: "🗂️",
+      titulo: "Saúde no Campo: Log + Remover atendimento",
+      descricao: "Painel com duas abas para o sistema Saúde no Campo.",
+      recursos: [
+        "Pesquisa no log de sincronização",
+        "Remoção de atendimento por ID",
+      ],
+      sites: ["Saúde no Campo"],
+      arquivo: "log-e-remover.user.js"
+    },
+    {
+      icone: "🎧",
+      titulo: "Acelerador de Áudio",
+      descricao: "Adiciona botões de velocidade aos áudios e vídeos do Salesforce.",
+      recursos: [
+        "Velocidades 1x, 1.5x, 2x e 3x",
+        "Lembra a última velocidade escolhida",
+        "Mantém o tom natural da voz",
+      ],
+      sites: ["Salesforce"],
+      arquivo: "acelerador-de-audio.user.js"
+    }
+  ];
+  /* ===================== fim da edição ===================== */
+
+  const grid = document.getElementById("grid");
+  grid.innerHTML = projetos.map((p, i) => `
+    <article class="card">
+      <div class="card-top">
+        <span class="icon">${p.icone}</span>
+        <span class="version" id="v-${i}">…</span>
+      </div>
+      <h3>${p.titulo}</h3>
+      <p>${p.descricao}</p>
+      <ul>${p.recursos.map(r => `<li>${r}</li>`).join("")}</ul>
+      <div class="sites">${p.sites.map(s => `<span>${s}</span>`).join("")}</div>
+      <div class="btn-row">
+        <a class="btn btn-primary" href="scripts/${p.arquivo}">⚡ Instalar</a>
+        <button class="btn btn-ghost" data-copy="${p.arquivo}">Copiar código</button>
+      </div>
+    </article>`).join("");
+
+  // Lê a versão (@version) direto de cada script
+  projetos.forEach((p, i) => {
+    fetch("scripts/" + p.arquivo)
+      .then(r => r.ok ? r.text() : Promise.reject())
+      .then(t => {
+        const m = t.match(/@version\s+(\S+)/);
+        document.getElementById("v-" + i).textContent = m ? "v" + m[1] : "";
+      })
+      .catch(() => { document.getElementById("v-" + i).style.display = "none"; });
+  });
+
+  // Botão "Copiar código"
+  const toast = document.getElementById("toast");
+  grid.addEventListener("click", async (e) => {
+    const b = e.target.closest("[data-copy]");
+    if (!b) return;
+    try {
+      const txt = await (await fetch("scripts/" + b.dataset.copy)).text();
+      await navigator.clipboard.writeText(txt);
+      toast.textContent = "Código copiado!";
+    } catch {
+      toast.textContent = "Não foi possível copiar. Use o botão Instalar.";
+    }
+    toast.classList.add("show");
+    setTimeout(() => toast.classList.remove("show"), 2200);
+  });
+
+  // Link do Tampermonkey de acordo com o navegador
+  const lojas = {
+    Chrome:  "https://chromewebstore.google.com/detail/dhdgffkkebhmkfjojejmpbldmpobfkfo",
+    Edge:    "https://microsoftedge.microsoft.com/addons/detail/iikmkjmpaadaobahmlepeloendndfphd",
+    Firefox: "https://addons.mozilla.org/firefox/addon/tampermonkey/"
+  };
+  const ua = navigator.userAgent;
+  const nav = /Edg\//.test(ua) ? "Edge" : /Firefox\//.test(ua) ? "Firefox" : "Chrome";
+  const tmBtn = document.getElementById("tm-btn");
+  tmBtn.href = lojas[nav];
+  tmBtn.textContent = "⬇ Instalar Tampermonkey (" + nav + ")";
+  document.getElementById("tm-others").innerHTML = "Outro navegador? " +
+    Object.keys(lojas).filter(k => k !== nav)
+      .map(k => `<a href="${lojas[k]}" target="_blank" rel="noopener">${k}</a>`).join(" · ");
+  if (nav === "Firefox") {
+    document.getElementById("perm-steps").innerHTML = "<li>No Firefox não é preciso fazer nada. Pule para o passo 3.</li>";
+  }
+
+  document.getElementById("ano").textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
