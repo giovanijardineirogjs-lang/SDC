@@ -143,6 +143,11 @@
   <p class="sub">Se já tiver o Tampermonkey, basta clicar em <strong>Instalar</strong>. Reinstalar uma versão nova atualiza o script.</p>
   <main class="grid" id="grid"></main>
 
+  <!-- ================= PROGRAMAS (.exe das Releases) ================= -->
+  <h2>Programas para Windows</h2>
+  <p class="sub">Baixe e execute com dois cliques. Esta lista é atualizada sozinha a cada nova Release publicada no GitHub.</p>
+  <div class="grid" id="programas"><p class="sub">Carregando programas…</p></div>
+
   <!-- ================= AJUDA ================= -->
   <h2>Dúvidas e problemas</h2>
   <p class="sub">Se algo não funcionar, veja aqui.</p>
@@ -173,6 +178,11 @@
   <details>
     <summary>Como recebo atualizações?</summary>
     <p>Como os scripts foram instalados por este site, o Tampermonkey verifica sozinho se há uma versão nova (cerca de uma vez por dia). Para forçar, clique no ícone do Tampermonkey e em <strong>Verificar atualizações de scripts</strong>. Outra opção é clicar em <strong>Instalar</strong> novamente aqui.</p>
+  </details>
+
+  <details>
+    <summary>O Windows bloqueou o programa (.exe)</summary>
+    <p>Na tela azul “O Windows protegeu o computador”, clique em <strong>Mais informações</strong> e depois em <strong>Executar assim mesmo</strong>. Se o antivírus da empresa apagar o arquivo, peça à TI para liberá-lo.</p>
   </details>
 
   <details>
@@ -296,6 +306,62 @@
   if (nav === "Firefox") {
     document.getElementById("perm-steps").innerHTML = "<li>No Firefox não é preciso fazer nada. Pule para o passo 3.</li>";
   }
+
+  /* =========================================================
+     ✏️ PROGRAMAS (.exe / .zip publicados em Releases)
+     REPO: usuário/repositório do GitHub.
+     descricoes: opcional. Chave = nome exato do arquivo.
+     Sem descrição aqui, o card usa o texto da Release.
+     ========================================================= */
+  const REPO = "SDCampo/SDC";
+  const descricoes = {
+    // "meu_projeto.exe": { icone: "🐍", titulo: "Meu Projeto", descricao: "O que ele faz." },
+  };
+  /* ===================== fim da edição ===================== */
+
+  const progEl = document.getElementById("programas");
+  const kb = n => n > 1048576 ? (n / 1048576).toFixed(1) + " MB" : Math.ceil(n / 1024) + " KB";
+  const esc = s => String(s || "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+  fetch(`https://api.github.com/repos/${REPO}/releases?per_page=50`)
+    .then(r => r.ok ? r.json() : Promise.reject(r.status))
+    .then(releases => {
+      const vistos = new Map(); // nome do arquivo -> versão mais recente
+      releases.filter(r => !r.draft).forEach(rel => {
+        rel.assets.filter(a => /\.(exe|zip|msi)$/i.test(a.name)).forEach(a => {
+          if (!vistos.has(a.name)) vistos.set(a.name, { a, rel });
+        });
+      });
+      if (!vistos.size) {
+        progEl.innerHTML = `<p class="sub">Nenhum programa publicado ainda.</p>`;
+        return;
+      }
+      progEl.innerHTML = [...vistos.values()].map(({ a, rel }) => {
+        const d = descricoes[a.name] || {};
+        const texto = d.descricao || (rel.body || "").split("\n").find(l => l.trim()) || "";
+        return `
+        <article class="card">
+          <div class="card-top">
+            <span class="icon">${d.icone || "🐍"}</span>
+            <span class="version">${esc(rel.tag_name)}</span>
+          </div>
+          <h3>${esc(d.titulo || a.name.replace(/\.(exe|zip|msi)$/i, "").replace(/[_-]+/g, " "))}</h3>
+          <p>${esc(texto)}</p>
+          <div class="sites">
+            <span>${esc(a.name)}</span>
+            <span>${kb(a.size)}</span>
+            <span>${new Date(rel.published_at).toLocaleDateString("pt-BR")}</span>
+          </div>
+          <div class="btn-row">
+            <a class="btn btn-primary" href="${a.browser_download_url}">⬇ Baixar</a>
+            <a class="btn btn-ghost" href="${rel.html_url}" target="_blank" rel="noopener">Notas da versão</a>
+          </div>
+        </article>`;
+      }).join("");
+    })
+    .catch(() => {
+      progEl.innerHTML = `<p class="sub">Não foi possível carregar a lista agora. <a href="https://github.com/${REPO}/releases/latest" target="_blank" rel="noopener">Abrir a página de downloads</a>.</p>`;
+    });
 
   document.getElementById("ano").textContent = new Date().getFullYear();
 </script>
